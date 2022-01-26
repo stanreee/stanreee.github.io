@@ -1,0 +1,12 @@
+.title {
+  margin: 0px;
+  margin-top: 40vh;
+  display: inline-block;
+}
+
+.home {
+  position: relative;
+  /* height: -webkit-calc(100% + 60vh);
+  height: calc(100% + 60vh); */
+  height: 60rem;
+}
