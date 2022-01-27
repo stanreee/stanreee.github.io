@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import { theme } from "../../../theme/theme";
-import spotifyPartyImage from "../../../images/spotify-party.png";
+import spotifyPartyImage from "../../../images/partify/party-screen.png";
+import sidebarImage from "../../../images/partify/sidebar.png";
+import mainScreen from "../../../images/partify/spotify-party.png";
+import { FC, useState } from "react";
+import Image from "next/image";
+
+type Props = {
+    src: string;
+}
 
 const Card = styled.div.attrs((props: {img: StaticImageData}) => props)`
     height: 53vh;
@@ -10,9 +18,9 @@ const Card = styled.div.attrs((props: {img: StaticImageData}) => props)`
     transition: all 0.15s ease-in;
     z-index: auto;
     position: relative;
-    background-image: url(${props => props.img.src});
-    background-size: cover;
-    background-position: center;
+    
+
+    transition: background-image 5s fade ease-in-out;
 
     @media only screen and (max-width: 768px) {
         width: 80vw;
@@ -42,12 +50,39 @@ const BehindCard = styled.div`
     }
 `;
 
-const ProjectCard = () => {
+const ProjectCard: FC<Props> = ({ src }) => {
     return <div style={{zIndex: "2", position: "relative"}}>
-        <Card img={spotifyPartyImage}>
+        <Card>
+            <Image layout="fill" objectFit="cover" src={src}></Image>
             <BehindCard></BehindCard>
         </Card>
-    </div>;
+    </div>
+
+    // --------- potential code for hover image preview ---------------
+    // const [src, setSrc] = useState(spotifyPartyImage);
+    // const images = [spotifyPartyImage, sidebarImage, mainScreen];
+    // var timeout: NodeJS.Timer;
+    // const [running, setRunning] = useState(false);
+    // return <div style={{zIndex: "2", position: "relative"}}>
+    //     <Card onMouseOver={() => {
+    //         if(running) return;
+    //         console.log("moused over " + running);
+    //         var index = 1;
+    //         setRunning(true);
+    //         timeout = setInterval(() => {
+    //             setSrc(images[index]);
+    //             index += 1;
+    //             if(index >= images.length) index = 0;
+    //             console.log("time out activated, " + index + ", " + running);
+    //         }, 2000);
+    //     }} onMouseOut={() => {
+    //         clearInterval(timeout);
+    //         setRunning(false);
+    //         console.log("cleared interval");
+    //     }} img={src}>
+    //         <BehindCard></BehindCard>
+    //     </Card>
+    // </div>;
 }
 
 export default ProjectCard;

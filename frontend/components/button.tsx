@@ -4,11 +4,19 @@ import { theme } from "../theme/theme";
 
 type Props = {
     onClick?: Function
+    href?: string
+    fontColour: string
+    defaultColour: string
+    fontHoverColour: string
+    fillColour: string
+    borderColour?: string
 }
 
-const StyledButton = styled.button`
-    color: ${theme.background};
-    background-color: ${theme.white};
+const StyledButton = styled.button.attrs((props: {borderColour: string, fontColour: string, defaultColour: string, fontHoverColour: string, fillColour: string}) => props)`
+    /* color: ${theme.background}; */
+    color: ${(props) => props.fontColour};
+    /* background-color: ${theme.white}; */
+    background-color: ${(props) => props.defaultColour};
 
     height: 5.5vh;
     margin-bottom: 20px;
@@ -17,7 +25,7 @@ const StyledButton = styled.button`
     font-size: 0.9rem;
     transition: all .15s ease;
     cursor: pointer;
-    border: none;
+    border: ${(props) => props.borderColour ? "1px solid " + props.borderColour : "none"};
     position: relative;
     overflow: hidden;
     padding: 0;
@@ -30,7 +38,8 @@ const StyledButton = styled.button`
     div {
         padding: 16px;
         z-index: 2;
-        color: ${theme.background};
+        /* color: ${theme.background}; */
+        color: ${(props) => props.fontColour};
         transition: all ease 0.20s;
         position: relative;
         height: 100%;
@@ -38,7 +47,8 @@ const StyledButton = styled.button`
         
 
         :hover {
-            color: white;
+            /* color: white; */
+            color: ${(props) => props.fontHoverColour};
             z-index: 2;
         }
     }
@@ -46,7 +56,8 @@ const StyledButton = styled.button`
     :after {
         content: "";
         position: absolute;
-        background: ${theme.primary};
+        /* background: ${theme.primary}; */
+        background: ${(props) => props.fillColour};
         bottom: 0;
         left: -10%;
         right: 120%;
@@ -61,10 +72,13 @@ const StyledButton = styled.button`
     }
 `;
 
-const Button: FC<Props> = ({ onClick, children }) => {
-    return <StyledButton onClick={(onClick) => onClick && onClick}>
-        <div>{children}</div>
-    </StyledButton>;
+const Button: FC<Props> = ({ borderColour, href, onClick, fontColour, fontHoverColour, defaultColour, fillColour, children }) => {
+    return <a rel="noreferrer" target="_blank" href={href && href}>
+        <StyledButton borderColour={borderColour} fontColour={fontColour} fontHoverColour={fontHoverColour} defaultColour={defaultColour} fillColour={fillColour} onClick={(onClick: any) => onClick && onClick}>
+            <div>{children}</div>
+        </StyledButton>
+    </a>
+    
 }
 
 export default Button;

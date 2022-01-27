@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import React, { useEffect, useState } from 'react'
 import About from '../components/about/about'
 import HomeNav from '../components/home/home'
@@ -7,29 +7,53 @@ import NavBar from '../components/navbar'
 import Projects from '../components/projects/projects'
 import { theme } from '../theme/theme'
 import { createGlobalStyle } from 'styled-components';
+import { getProjects, initializeFirebase } from '../firebase/database'
+import { ProjectModel } from '../models/project_model'
 
-const Home: NextPage = () => {
+const Home = ({ projects }: {
+  projects: ProjectModel[]
+}) => {
   const [currentID, setCurrentID] = useState("home");
 
   useEffect(() => {
     const callback = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
       entries.forEach((entry: IntersectionObserverEntry) => {
         if(entry.isIntersecting) {
-          console.log(entry.target.id);
           setCurrentID(entry.target.id);
         }
       })
     }
+
+    const projectCallback = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+      entries.forEach((entry: IntersectionObserverEntry) => {
+        if(entry.isIntersecting) {
+          entry.target.id = (entry.target.className.includes("project__right") ? "fadeLeft" : "fadeRight");
+          observer.unobserve(entry.target);
+        }
+      })
+    }
   
-    let observer = new IntersectionObserver(callback, {
+    let sectionObserver = new IntersectionObserver(callback, {
       root: null,
       rootMargin: '0px',
       threshold: 0.5
     });
+
+    let projectObserver = new IntersectionObserver(projectCallback, {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.4
+    })
   
-    observer.observe(document.getElementById("home")!);
-    observer.observe(document.getElementById("about")!);
-    observer.observe(document.getElementById("projects")!);
+    sectionObserver.observe(document.getElementById("home")!);
+    sectionObserver.observe(document.getElementById("about")!);
+    sectionObserver.observe(document.getElementById("projects")!);
+
+    const rightTargets: NodeListOf<Element> = document.querySelectorAll(".project__right");
+    const leftTargets: NodeListOf<Element> = document.querySelectorAll(".project__left");
+
+    rightTargets.forEach((element) => projectObserver.observe(element));
+    leftTargets.forEach((element) => projectObserver.observe(element));
   }, []);
 
   const GlobalStyle = createGlobalStyle`
@@ -44,6 +68,42 @@ const Home: NextPage = () => {
       width: 8px;
       border-radius: 5px;
     }
+
+    @keyframes fadeInLeft {
+      from {
+        left: 20px;
+        opacity: 0;
+      }
+      to{
+        left: 0px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        right: 20px;
+        opacity: 0;
+      }
+      to{
+        right: 0px;
+        opacity: 1;
+      }
+    }
+
+    #fadeLeft {
+      animation-name: fadeInLeft;
+      animation-duration: 1s;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: forwards;
+    }
+
+    #fadeRight {
+      animation-name: fadeInRight;
+      animation-duration: 1s;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: forwards;
+    }
   `;
 
   return (
@@ -53,9 +113,19 @@ const Home: NextPage = () => {
       </React.Fragment>
       <HomeNav></HomeNav>
       <About></About>
-      <Projects></Projects>
+      <Projects projects={projects}></Projects>
     </Layout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  initializeFirebase();
+  const projects = await getProjects();
+  return {
+    props: {
+      projects
+    }
+  }
 }
 
 export default Home

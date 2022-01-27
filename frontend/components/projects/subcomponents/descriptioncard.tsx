@@ -1,6 +1,12 @@
+import { FC } from "react";
 import styled from "styled-components";
+import { ProjectModel } from "../../../models/project_model";
 import { theme } from "../../../theme/theme";
 import Button from "../../button";
+
+type Props = {
+    project: ProjectModel
+}
 
 const Card = styled.div`
     height: 32vh;
@@ -29,14 +35,14 @@ const ButtonDiv = styled.div`
     }
 `;
 
-const DescriptionCard = () => {
+const DescriptionCard: FC<Props> = ({ project }) => {
     return <Card>
-        <h2 style={{fontWeight: "normal"}}>Project Title Here</h2>
-        <h3 style={{fontWeight: "normal"}}>Project Description Here</h3>
+        <h2 style={{fontWeight: "normal"}}>{project.project_name}</h2>
+        <h3 style={{fontWeight: "normal"}}>{project.project_description}</h3>
         <ButtonDiv>
-            <Button onClick={() => {
-                console.log("OPEN");
-            }}>VIEW ON GITHUB</Button>
+            <Button fontColour={theme.background} defaultColour={theme.white} fontHoverColour={theme.white} fillColour={theme.primary} href={project.github_link}>VIEW ON GITHUB</Button>
+            <div style={{width: "20px"}}></div>
+            <Button borderColour={theme.white} fontColour={theme.white} defaultColour={theme.secondaryCard} fontHoverColour={theme.background} fillColour={theme.white} href={project.try_out}>TRY IT OUT</Button>
         </ButtonDiv>
     </Card>
 }

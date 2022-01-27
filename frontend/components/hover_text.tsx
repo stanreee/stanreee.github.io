@@ -21,13 +21,15 @@ interface Enable extends Props {
     whereInPage: string
 }
 
-const Text = styled.h1.attrs((props: {color: string, fontSize: string, hoverColor: string, paddingRight: string}) => props)`
+const Text = styled.p.attrs((props: {color: string, fontSize: string, hoverColor: string, paddingRight: string}) => props)`
     color: ${(props) => props.color};
     font-size: ${(props) => props.fontSize};
     box-shadow: inset 0 -0.05em 0 0 ${(props) => props.hoverColor};
-    transition: box-shadow .5s cubic-bezier(.13,.78,.3,.99), color .25s ease-in-out;
     margin: 0px;
     padding-right: ${(props) => props.paddingRight};
+    font-weight: bold;
+
+    transition: box-shadow .5s cubic-bezier(.13,.78,.3,.99), color .25s ease-in-out;
 
     :hover {
         color: #EFEFEF;

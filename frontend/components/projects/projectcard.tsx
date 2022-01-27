@@ -1,10 +1,12 @@
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
+import { ProjectModel } from "../../models/project_model";
 import ProjectCard from "./subcomponents/card";
 import DescriptionCard from "./subcomponents/descriptioncard";
 
 type Props = {
-    left: boolean
+    left: boolean,
+    project: ProjectModel
 }
 
 const Wrapper = styled.div.attrs((props: { left: boolean }) => props)`
@@ -14,6 +16,13 @@ const Wrapper = styled.div.attrs((props: { left: boolean }) => props)`
     height: 100%;
     margin-top: 50px;
     margin-bottom: 50px;
+
+    /* set opacity to 0 here, animation will reveal it */
+    opacity: 0;
+    
+    @media only screen and (max-width: 768px) {
+        right: 12px;
+    }
 `;
 
 const ProjectWrapper = styled.div`
@@ -34,11 +43,11 @@ const DescriptionWrapper = styled.div.attrs((props: { left: boolean }) => props)
     @media only screen and (max-width: 768px) {
         left: 0;
         bottom: 0;
-        top: 25px;
+        top: 10px;
     }
 `;
 
-const ProjectItem: FC<Props> = ({ left }) => {
+const ProjectItem: FC<Props> = ({ left, project }) => {
     const [isLeft, setLeft] = useState(left);
     useEffect(() => {
         const queryList = window.matchMedia("(max-width: 768px)");
@@ -48,9 +57,9 @@ const ProjectItem: FC<Props> = ({ left }) => {
         }
         queryList.addEventListener("change", () => !matches ? setLeft(false) : setLeft(left));
     });
-    const projectCard: JSX.Element = <ProjectCard></ProjectCard>;
-    const descriptionWrapper: JSX.Element = <DescriptionWrapper left={isLeft}><DescriptionCard></DescriptionCard></DescriptionWrapper>;
-    return <Wrapper left={isLeft}>
+    const projectCard: JSX.Element = <ProjectCard src={project.image_link}></ProjectCard>;
+    const descriptionWrapper: JSX.Element = <DescriptionWrapper left={isLeft}><DescriptionCard project={project}></DescriptionCard></DescriptionWrapper>;
+    return <Wrapper left={isLeft} className={"project__" + (left ? "left" : "right")}>
         <ProjectWrapper>
             {
                 isLeft ? descriptionWrapper : projectCard
