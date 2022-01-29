@@ -26,10 +26,10 @@ const Projects: FC<Props> = ({ projects }) => {
             <h2 style={{display: "inline-block"}}>My</h2> <span>&nbsp;</span> <h2 style={{display: "inline-block", color: theme.primary}}>projects.</h2>
         </div>
         <div style={{height: "fit-content", display: "flex", flexDirection: "column"}}>
-            {projects.sort((a, b) => (a.priority > b.priority) ? 1 : -1).map((project) => {
+            {projects.sort((a, b) => (a.priority > b.priority) ? 1 : -1).map((project, index) => {
                 const left = count % 2 == 0;
                 count += 1;
-                return <ProjectItem disableAlternation={disableAlternation} project={project} left={left}></ProjectItem>
+                return <ProjectItem key={index} disableAlternation={disableAlternation} project={project} left={left}></ProjectItem>
             })}
         </div>
         

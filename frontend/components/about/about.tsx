@@ -55,7 +55,7 @@ const About: FC<Props> = ({ about }) => {
                     These are some of the technologies that I currently have experience with:
                 </h3>
                 <div className={styles.skillsFlex}>
-                    {about.skills.map((skill) => <div><h3 style={{textAlign: "center", color: theme.primary, transition: "all 0.5s ease-in-out"}}>{skill}</h3></div>)}
+                    {about.skills.map((skill, index) => <div key={index}><h3 style={{textAlign: "center", color: theme.primary, transition: "all 0.5s ease-in-out"}}>{skill}</h3></div>)}
                 </div>
             </div>
         </div>
