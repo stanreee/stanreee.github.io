@@ -17,9 +17,7 @@ const nextConfig = {
     loader: 'akamai',
     path: ''
   },
-  assetPrefix: isProd ? 'personal-portfolio' : '',
-  basePath: '/',
-  assetPrefix: '/'
+  assetPrefix: './'
 }
 
 module.exports = nextConfig
