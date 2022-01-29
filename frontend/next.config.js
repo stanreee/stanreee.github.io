@@ -13,7 +13,9 @@ const nextConfig = {
     NEXT_PUBLIC_API_KEY: process.env.NEXT_PUBLIC_API_KEY
   },
   images: {
-    domains: ['i.imgur.com']
+    domains: ['i.imgur.com'],
+    loader: 'akamai',
+    path: ''
   },
   assetPrefix: isProd ? 'personal-portfolio' : ''
 }
