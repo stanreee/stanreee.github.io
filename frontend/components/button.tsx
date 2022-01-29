@@ -30,18 +30,21 @@ const StyledButton = styled.button.attrs((props: {theme: Theme, width: string, b
     width: ${(props) => props.width};
 
     @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
-        height: 40px;
         font-size: 12px;
     }
 
     div {
-        padding: 16px;
+        padding-left: 16px;
+        padding-right: 16px;
         z-index: 2;
         color: ${(props) => props.fontColour};
         transition: all ease 0.20s;
         position: relative;
-        height: 100%;
+        height: 50px;
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         
 
         :hover {

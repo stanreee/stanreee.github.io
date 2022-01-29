@@ -11,6 +11,7 @@ import { ProjectModel } from '../models/project_model'
 import { useGlobalState } from '../theme/theme'
 import { AboutModel } from '../models/about_model'
 import Head from 'next/head'
+import Contact from '../components/contact/contact'
 
 type State = {
   dark: boolean
@@ -53,6 +54,9 @@ const Home = ({ projects, about }: {
       entries.forEach((entry: IntersectionObserverEntry) => {
         if(entry.isIntersecting) {
           setCurrentID(entry.target.id);
+          if(entry.target.id == "contact") {
+            entry.target.classList.add("fadeIn");
+          }
         }
       })
     }
@@ -69,7 +73,7 @@ const Home = ({ projects, about }: {
     let sectionObserver = new IntersectionObserver(callback, {
       root: null,
       rootMargin: '0px',
-      threshold: 0.5
+      threshold: 0.3
     });
 
     let projectObserver = new IntersectionObserver(projectCallback, {
@@ -81,6 +85,7 @@ const Home = ({ projects, about }: {
     sectionObserver.observe(document.getElementById("home")!);
     sectionObserver.observe(document.getElementById("about")!);
     sectionObserver.observe(document.getElementById("projects")!);
+    sectionObserver.observe(document.getElementById("contact")!);
 
     const rightTargets: NodeListOf<Element> = document.querySelectorAll(".project__right");
     const leftTargets: NodeListOf<Element> = document.querySelectorAll(".project__left");
@@ -124,6 +129,15 @@ const Home = ({ projects, about }: {
       }
     }
 
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to{
+        opacity: 1;
+      }
+    }
+
     #fadeLeft {
       animation-name: fadeInLeft;
       animation-duration: 1s;
@@ -133,6 +147,13 @@ const Home = ({ projects, about }: {
 
     #fadeRight {
       animation-name: fadeInRight;
+      animation-duration: 1s;
+      animation-timing-function: ease-in-out;
+      animation-fill-mode: forwards;
+    }
+
+    .fadeIn {
+      animation-name: fadeIn;
       animation-duration: 1s;
       animation-timing-function: ease-in-out;
       animation-fill-mode: forwards;
@@ -157,6 +178,7 @@ const Home = ({ projects, about }: {
         <HomeNav></HomeNav>
         <About about={about}></About>
         <Projects projects={projects}></Projects>
+        <Contact></Contact>
       </Layout>
   )
 }

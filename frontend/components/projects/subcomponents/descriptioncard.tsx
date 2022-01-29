@@ -26,18 +26,18 @@ const Card = styled.div.attrs((props: { theme: Theme }) => props)`
 
     @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
         width: 80vw;
-        height: 30vh;
-        padding: 9px;
-        padding-top: 18px;
+        height: fit-content;
+        padding: 18px;
+        padding-top: 0px;
     }
 `;
 
 const DescriptionWrapper = styled.div.attrs((props: { theme: Theme }) => props)`
     height: fit-content;
 
-    @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
+    /* @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
         height: 10vh;
-    }
+    } */
 `;
 
 const ButtonDiv = styled.div`

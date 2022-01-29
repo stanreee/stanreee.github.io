@@ -24,11 +24,39 @@ const BackgroundImage = styled(Image).attrs((props: {theme: Theme, forTheme: str
 
     transition: opacity 0.5s ease-in-out;
     z-index: -1;
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    animation: ${(props) => props.forTheme == "dark" ? "fadeIn" : "none"};
+    animation-duration: 2s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
 `;
 
 const HomeDiv = styled.div`
     margin-left: 10vw;
     margin-right: 10vw;
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    animation: fadeIn;
+    animation-duration: 2s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
 `;
 
 const HomeNav = () => {

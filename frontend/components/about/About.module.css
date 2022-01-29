@@ -21,7 +21,7 @@
 
 .skillsFlex {
     display: grid;
-    width: 60%;
+    width: 100%;
     grid-template-columns: auto auto auto;
     grid-template-rows: 50px 50px 50px;
 }

@@ -38,8 +38,8 @@ const DarkModeImage = styled(Image)`
 const NavBar: FC<Props> = ({ whereInPage }) => {
     const [theme, setTheme] = useGlobalState("theme");
     return (<Bar theme={theme}>
-        <div style={{display: "flex"}}>
-            <div style={{marginRight: "20px", marginTop: "2px"}}>
+        <div style={{display: "flex", alignItems: "center"}}>
+            <div style={{marginRight: "20px", marginTop: "3px"}}>
                 <DarkModeImage onClick={() => {
                     if (theme.themeString == "dark") setTheme(lightTheme)
                     else setTheme(darkTheme);

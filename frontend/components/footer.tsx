@@ -7,12 +7,15 @@ const FooterDiv = styled.div.attrs((props: { theme: Theme }) => props)`
     height: 10vh;
     width: 100%;
     margin-top: 3vh;
-    background-color: ${(props) => props.theme.secondaryCard};  
+    /* background-color: ${(props) => props.theme.secondaryCard};   */
     transition: background-color 0.5s ease-in-out;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: ${(props) => props.theme.background + "80"};
+    filter: drop-shadow(0 0 0.25rem black);
+    backdrop-filter: blur(8px);
 `;
 
 const FooterText = styled(HoverText).attrs((props: { theme: Theme }) => props)`
