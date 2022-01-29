@@ -41,7 +41,7 @@ const Contact = () => {
     return <ContactDiv id="contact">
         <ContentDiv>
             <div><h2 style={{color: theme.primary, paddingRight: "7px"}}>Contact</h2></div>
-            <h3 style={{textAlign: "center"}}>Want to reach out? Send me an email and I'll get back to you as soon as possible.</h3>
+            <h3 style={{textAlign: "center"}}>Want to reach out? Send me an email and I&apos;ll get back to you as soon as possible.</h3>
             <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
                 <Button href="mailto:stanley.chan185@gmail.com" borderColour={theme.white} fontColour={theme.white} defaultColour={theme.background} fontHoverColour={theme.background} fillColour={theme.white} width={""}>Get in Touch</Button>
             </div>
