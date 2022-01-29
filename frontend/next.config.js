@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === "production"
+
 const nextConfig = {
   reactStrictMode: true,
   env: {
@@ -12,7 +14,8 @@ const nextConfig = {
   },
   images: {
     domains: ['i.imgur.com']
-  }
+  },
+  assetPrefix: isProd ? 'personal-portfolio' : ''
 }
 
 module.exports = nextConfig

@@ -10,6 +10,7 @@ import { getAbout, getProjects, initializeFirebase } from '../firebase/database'
 import { ProjectModel } from '../models/project_model'
 import { useGlobalState } from '../theme/theme'
 import { AboutModel } from '../models/about_model'
+import Head from 'next/head'
 
 type State = {
   dark: boolean
@@ -146,6 +147,10 @@ const Home = ({ projects, about }: {
 
   return (
       <Layout whereInPage={currentID}>
+        <Head>
+          <link rel="icon" type="image/png" sizes="20x20" href="/moon-fill.png"></link>
+          <title>Stanley Chan</title>
+        </Head>
         <React.Fragment>
           <GlobalStyle></GlobalStyle>
         </React.Fragment>
