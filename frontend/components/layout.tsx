@@ -1,5 +1,6 @@
 import { FC } from "react";
 import styled from "styled-components";
+import Footer from "./footer";
 import NavBar from "./navbar";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 const Children = styled.div`
     padding-left: 10vw;
     padding-right: 10vw;
+    height: fit-content;
     
     @media only screen and (max-width: 768px) {
         padding-left: 50px;
@@ -23,6 +25,7 @@ const Layout: FC<Props> = ({ whereInPage, children }) => {
             <Children>
                 {children}
             </Children>
+            <Footer></Footer>
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from 'next/router';
 import { FontSize } from "../enums/fontsize";
-import { theme } from "../theme/theme";
+import { Theme, useGlobalState } from "../theme/theme";
 
 const MEDIA_QUERIES = {
     small: "(max-width: 768px)"
@@ -15,19 +15,20 @@ type Props = {
     pathName?: string,
     paddingRight?: string,
     id?: string,
+    weight?: string,
 }
 
 interface Enable extends Props {
     whereInPage: string
 }
 
-const Text = styled.p.attrs((props: {color: string, fontSize: string, hoverColor: string, paddingRight: string}) => props)`
+const Text = styled.p.attrs((props: {weight: string, color: string, fontSize: string, hoverColor: string, paddingRight: string}) => props)`
     color: ${(props) => props.color};
     font-size: ${(props) => props.fontSize};
     box-shadow: inset 0 -0.05em 0 0 ${(props) => props.hoverColor};
     margin: 0px;
     padding-right: ${(props) => props.paddingRight};
-    font-weight: bold;
+    font-weight: ${(props) => props.weight ? props.weight : "bold"};
 
     transition: box-shadow .5s cubic-bezier(.13,.78,.3,.99), color .25s ease-in-out;
 
@@ -48,22 +49,23 @@ const TextEnable = styled(Text).attrs((props: {color: string, fontSize: string, 
     }
 `;
 
-export const HoverText: FC<Props> = ({ textColor, fontSizeOption = FontSize.Regular, hoverColor, paddingRight, id, children }) => {
+export const HoverText: FC<Props> = ({ weight, textColor, fontSizeOption = FontSize.Regular, hoverColor, paddingRight, id, children }) => {
     const [fontSize, setFontSize] = useState("28px");
+    const [theme, setTheme] = useGlobalState("theme");
     useEffect(() => {
         const queryList = window.matchMedia("(max-width: 768px)");
         const matches = queryList.matches;
-        setFontSize(getFontSize(fontSizeOption, matches));
-        queryList.addEventListener("change", () => setFontSize(getFontSize(fontSizeOption, !matches)));
+        setFontSize(getFontSize(fontSizeOption, matches, theme));
+        queryList.addEventListener("change", () => setFontSize(getFontSize(fontSizeOption, !matches, theme)));
     });
     return (
-        <div style={{paddingRight: paddingRight}}>
+        <div style={{paddingRight: paddingRight, width: "fit-content"}}>
             <a onClick={() => {
                 if(id != null) {
                     scrollTo(id);
                 }
             }}>
-                <Text color={textColor} fontSize={fontSize} hoverColor={hoverColor}>{children}</Text>
+                <Text weight={weight} color={textColor} fontSize={fontSize} hoverColor={hoverColor}>{children}</Text>
             </a>
         </div>
     );
@@ -71,11 +73,12 @@ export const HoverText: FC<Props> = ({ textColor, fontSizeOption = FontSize.Regu
 
 export const NavBarText: FC<Enable> = ({ whereInPage, textColor, fontSizeOption = FontSize.Regular, hoverColor, paddingRight, id, children }) => {
     const [fontSize, setFontSize] = useState("28px");
+    const [theme, setTheme] = useGlobalState("theme");
     useEffect(() => {
         const queryList = window.matchMedia("(max-width: 768px)");
         const matches = queryList.matches;
-        setFontSize(getFontSize(fontSizeOption, matches));
-        queryList.addEventListener("change", () => setFontSize(getFontSize(fontSizeOption, !matches)));
+        setFontSize(getFontSize(fontSizeOption, matches, theme));
+        queryList.addEventListener("change", () => setFontSize(getFontSize(fontSizeOption, !matches, theme)));
     });
     return (
         <div style={{paddingRight: paddingRight}}>
@@ -90,26 +93,28 @@ export const NavBarText: FC<Enable> = ({ whereInPage, textColor, fontSizeOption 
     );
 }
 
-function getFontSize(fontSizeOption: FontSize, predicate: boolean) {
+function getFontSize(fontSizeOption: FontSize, predicate: boolean, theme: Theme) {
     switch(fontSizeOption) {
         case FontSize.Regular:
             if(predicate) {
-                return theme.phoneRegularFontSize;
+                return theme.phoneRegularFontSize!;
             }else{
-                return theme.desktopRegularFontSize;
+                return theme.desktopRegularFontSize!;
             }
         case FontSize.Large:
             if(predicate) {
-                return theme.phoneLargeFontSize;
+                return theme.phoneLargeFontSize!;
             }else {
-                return theme.desktopLargeFontSize;
+                return theme.desktopLargeFontSize!;
             }
         case FontSize.Small:
             if(predicate) {
-                return theme.phoneSmallFontSize;
+                return theme.phoneSmallFontSize!;
             }else {
-                return theme.desktopSmallFontSize;
+                return theme.desktopSmallFontSize!;
             }
+        case FontSize.Footer:
+            return "15px";
     }
 }
 

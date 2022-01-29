@@ -5,15 +5,31 @@
     margin-right: auto;
     padding-left: 5rem;
     padding-right: 5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .skills {
     flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+}
+
+.skillsFlex {
+    display: grid;
+    width: 60%;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: 50px 50px 50px;
 }
 
 .aboutRow {
     width: 100%;
     display: flex;
+    height: fit-content;
 }
 
 @media only screen and (max-width: 768px) {
@@ -29,5 +45,9 @@
 
     .skills {
         padding-top: 2rem;
+    }
+
+    .skills h3 {
+        text-align: center;
     }
 }

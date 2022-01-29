@@ -1,6 +1,7 @@
 import { DocumentData } from "@firebase/firestore";
 import firebase from "firebase/compat/app";
 import 'firebase/compat/firestore';
+import { AboutModel } from "../models/about_model";
 import { ProjectModel } from "../models/project_model";
 
 export function initializeFirebase() {
@@ -29,5 +30,15 @@ export async function getProjects() {
     snapshot.forEach((doc) => {
         data.push(doc.data() as ProjectModel);
     });
+    return data;
+}
+
+export async function getAbout() {
+    const firestore = firebase.firestore();
+    const collection = firestore.collection("about");
+    const snapshot = await collection.get();
+
+    const data: AboutModel = snapshot.docs[0].data() as AboutModel;
+
     return data;
 }

@@ -5,15 +5,47 @@ import HomeNav from '../components/home/home'
 import Layout from '../components/layout'
 import NavBar from '../components/navbar'
 import Projects from '../components/projects/projects'
-import { theme } from '../theme/theme'
 import { createGlobalStyle } from 'styled-components';
-import { getProjects, initializeFirebase } from '../firebase/database'
+import { getAbout, getProjects, initializeFirebase } from '../firebase/database'
 import { ProjectModel } from '../models/project_model'
+import { useGlobalState } from '../theme/theme'
+import { AboutModel } from '../models/about_model'
 
-const Home = ({ projects }: {
+type State = {
+  dark: boolean
+}
+
+type Action = {
+  type: string
+}
+
+const reducer = (state: State, action: Action) => {
+  switch(action.type) {
+    case "toggle_dark":
+      return {
+        ...state,
+        dark: !state.dark
+      }
+    default:
+      return state
+  }
+}
+
+const initialState = {
+  dark: true
+}
+
+const ThemeContext = React.createContext({
+  state: initialState,
+  dispatch: () => null
+})
+
+const Home = ({ projects, about }: {
   projects: ProjectModel[]
+  about: AboutModel
 }) => {
   const [currentID, setCurrentID] = useState("home");
+  const [theme, setTheme] = useGlobalState("theme");
 
   useEffect(() => {
     const callback = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
@@ -104,26 +136,34 @@ const Home = ({ projects }: {
       animation-timing-function: ease-in-out;
       animation-fill-mode: forwards;
     }
+
+    body {
+      background-color: ${theme.background};
+
+      transition: background-color 0.5s ease-in-out;
+    }
   `;
 
   return (
-    <Layout whereInPage={currentID}>
-      <React.Fragment>
-        <GlobalStyle></GlobalStyle>
-      </React.Fragment>
-      <HomeNav></HomeNav>
-      <About></About>
-      <Projects projects={projects}></Projects>
-    </Layout>
+      <Layout whereInPage={currentID}>
+        <React.Fragment>
+          <GlobalStyle></GlobalStyle>
+        </React.Fragment>
+        <HomeNav></HomeNav>
+        <About about={about}></About>
+        <Projects projects={projects}></Projects>
+      </Layout>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   initializeFirebase();
   const projects = await getProjects();
+  const about = await getAbout();
   return {
     props: {
-      projects
+      projects,
+      about
     }
   }
 }

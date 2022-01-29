@@ -1,15 +1,17 @@
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { ProjectModel } from "../../models/project_model";
+import { Theme, useGlobalState } from "../../theme/theme";
 import ProjectCard from "./subcomponents/card";
 import DescriptionCard from "./subcomponents/descriptioncard";
 
 type Props = {
     left: boolean,
-    project: ProjectModel
+    project: ProjectModel,
+    disableAlternation: boolean
 }
 
-const Wrapper = styled.div.attrs((props: { left: boolean }) => props)`
+const Wrapper = styled.div.attrs((props: { theme: Theme, left: boolean }) => props)`
     position: relative;
     display: flex;
     width: 100%;
@@ -20,52 +22,44 @@ const Wrapper = styled.div.attrs((props: { left: boolean }) => props)`
     /* set opacity to 0 here, animation will reveal it */
     opacity: 0;
     
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
         right: 12px;
     }
 `;
 
-const ProjectWrapper = styled.div`
+const ProjectWrapper = styled.div.attrs((props: { theme: Theme }) => props)`
     position: relative;
     display: flex;
 
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
         flex-direction: column;
     }
 `;
 
-const DescriptionWrapper = styled.div.attrs((props: { left: boolean }) => props)`
+const DescriptionWrapper = styled.div.attrs((props: { theme: Theme, left: boolean }) => props)`
     position: relative;
     z-index: 50;
     left: ${((props) => props.left ? "5rem" : "-5rem")};
-    bottom: -3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
         left: 0;
         bottom: 0;
         top: 10px;
     }
 `;
 
-const ProjectItem: FC<Props> = ({ left, project }) => {
+const ProjectItem: FC<Props> = ({ left, project, disableAlternation }) => {
+    const [theme, setTheme] = useGlobalState("theme");
     const [isLeft, setLeft] = useState(left);
-    useEffect(() => {
-        const queryList = window.matchMedia("(max-width: 768px)");
-        const matches = queryList.matches;
-        if(matches) {
-            setLeft(false);
-        }
-        queryList.addEventListener("change", () => !matches ? setLeft(false) : setLeft(left));
-    });
     const projectCard: JSX.Element = <ProjectCard src={project.image_link}></ProjectCard>;
-    const descriptionWrapper: JSX.Element = <DescriptionWrapper left={isLeft}><DescriptionCard project={project}></DescriptionCard></DescriptionWrapper>;
-    return <Wrapper left={isLeft} className={"project__" + (left ? "left" : "right")}>
-        <ProjectWrapper>
+    const descriptionWrapper: JSX.Element = <DescriptionWrapper theme={theme} left={isLeft}><DescriptionCard project={project}></DescriptionCard></DescriptionWrapper>;
+    return <Wrapper theme={theme} left={isLeft} className={"project__" + (left ? "left" : "right")}>
+        <ProjectWrapper theme={theme}>
             {
-                isLeft ? descriptionWrapper : projectCard
-            }
-            {
-                isLeft ? projectCard : descriptionWrapper
+                disableAlternation ? [projectCard, descriptionWrapper] : isLeft ? [descriptionWrapper, projectCard] : [projectCard, descriptionWrapper]
             }
         </ProjectWrapper>
     </Wrapper>

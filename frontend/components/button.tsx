@@ -1,6 +1,6 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { theme } from "../theme/theme";
+import { Theme, useGlobalState } from "../theme/theme";
 
 type Props = {
     onClick?: Function
@@ -10,27 +10,26 @@ type Props = {
     fontHoverColour: string
     fillColour: string
     borderColour?: string
+    width: string
 }
 
-const StyledButton = styled.button.attrs((props: {borderColour: string, fontColour: string, defaultColour: string, fontHoverColour: string, fillColour: string}) => props)`
-    /* color: ${theme.background}; */
+const StyledButton = styled.button.attrs((props: {theme: Theme, width: string, borderColour: string, fontColour: string, defaultColour: string, fontHoverColour: string, fillColour: string}) => props)`
     color: ${(props) => props.fontColour};
-    /* background-color: ${theme.white}; */
     background-color: ${(props) => props.defaultColour};
 
-    height: 5.5vh;
     margin-bottom: 20px;
     text-transform: uppercase;
     font-weight: bold;
     font-size: 0.9rem;
-    transition: all .15s ease;
+    transition: all 0.5s ease;
     cursor: pointer;
     border: ${(props) => props.borderColour ? "1px solid " + props.borderColour : "none"};
     position: relative;
     overflow: hidden;
     padding: 0;
+    width: ${(props) => props.width};
 
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
         height: 40px;
         font-size: 12px;
     }
@@ -38,7 +37,6 @@ const StyledButton = styled.button.attrs((props: {borderColour: string, fontColo
     div {
         padding: 16px;
         z-index: 2;
-        /* color: ${theme.background}; */
         color: ${(props) => props.fontColour};
         transition: all ease 0.20s;
         position: relative;
@@ -56,7 +54,6 @@ const StyledButton = styled.button.attrs((props: {borderColour: string, fontColo
     :after {
         content: "";
         position: absolute;
-        /* background: ${theme.primary}; */
         background: ${(props) => props.fillColour};
         bottom: 0;
         left: -10%;
@@ -72,9 +69,10 @@ const StyledButton = styled.button.attrs((props: {borderColour: string, fontColo
     }
 `;
 
-const Button: FC<Props> = ({ borderColour, href, onClick, fontColour, fontHoverColour, defaultColour, fillColour, children }) => {
+const Button: FC<Props> = ({ width, borderColour, href, onClick, fontColour, fontHoverColour, defaultColour, fillColour, children }) => {
+    const [theme, setTheme] = useGlobalState("theme");
     return <a rel="noreferrer" target="_blank" href={href && href}>
-        <StyledButton borderColour={borderColour} fontColour={fontColour} fontHoverColour={fontHoverColour} defaultColour={defaultColour} fillColour={fillColour} onClick={(onClick: any) => onClick && onClick}>
+        <StyledButton theme={theme} borderColour={borderColour} fontColour={fontColour} fontHoverColour={fontHoverColour} defaultColour={defaultColour} fillColour={fillColour} onClick={(onClick: any) => onClick && onClick}>
             <div>{children}</div>
         </StyledButton>
     </a>

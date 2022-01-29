@@ -1,6 +1,7 @@
 export enum FontSize {
     Regular,
     Large,
-    Small
+    Small,
+    Footer
 }
 

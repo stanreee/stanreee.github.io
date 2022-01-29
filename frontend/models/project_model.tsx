@@ -4,5 +4,6 @@ export interface ProjectModel {
     github_link: string;
     try_out?: string;
     image_link: string;
+    priority: number;
 }
 

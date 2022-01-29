@@ -1,19 +1,19 @@
 import styled from "styled-components";
-import { theme } from "../../../theme/theme";
 import spotifyPartyImage from "../../../images/partify/party-screen.png";
 import sidebarImage from "../../../images/partify/sidebar.png";
 import mainScreen from "../../../images/partify/spotify-party.png";
 import { FC, useState } from "react";
 import Image from "next/image";
+import { Theme, useGlobalState } from "../../../theme/theme";
 
 type Props = {
     src: string;
 }
 
-const Card = styled.div.attrs((props: {img: StaticImageData}) => props)`
+const Card = styled.div.attrs((props: {img: StaticImageData, theme: Theme}) => props)`
     height: 53vh;
     width: 48vw;
-    background-color: ${theme.card};
+    background-color: ${(props) => props.theme.card};
     display: inline-block;
     transition: all 0.15s ease-in;
     z-index: auto;
@@ -22,20 +22,20 @@ const Card = styled.div.attrs((props: {img: StaticImageData}) => props)`
 
     transition: background-image 5s fade ease-in-out;
 
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
         width: 80vw;
         height: 30vh;
     }
 
-    @media only screen and (min-width: 768px) {
+    @media only screen and (min-width: ${(props) => props.theme.projectCardMediaQuery}) {
         :hover div {
             transform: translate(32px, 20px);
         }
     }
 `;
 
-const BehindCard = styled.div`
-    background-color: ${theme.primary};
+const BehindCard = styled.div.attrs((props: { theme: Theme }) => props)`
+    background-color: ${(props) => props.theme.primary};
     transition: all 0.30s ease-in-out;
     height: 100%;
     width: 100%;
@@ -43,7 +43,7 @@ const BehindCard = styled.div`
     z-index: -1;
     transform: translate(24px, 14px);
 
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: ${(props) => props.theme.projectCardMediaQuery}) {
         width: 80vw;
         height: 30vh;
         transform: translate(2px, 2px);
@@ -51,10 +51,11 @@ const BehindCard = styled.div`
 `;
 
 const ProjectCard: FC<Props> = ({ src }) => {
+    const [theme, setTheme] = useGlobalState("theme");
     return <div style={{zIndex: "2", position: "relative"}}>
-        <Card>
+        <Card theme={theme}>
             <Image layout="fill" objectFit="cover" src={src}></Image>
-            <BehindCard></BehindCard>
+            <BehindCard theme={theme}></BehindCard>
         </Card>
     </div>
 
