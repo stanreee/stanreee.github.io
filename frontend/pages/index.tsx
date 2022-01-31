@@ -183,28 +183,28 @@ const Home = ({ projects, about }: {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  initializeFirebase();
-  const projects = await getProjects();
-  const about = await getAbout();
-  return {
-    props: {
-      projects,
-      about
-    }
-  }
-}
-
-// Home.getInitialProps = async () => {
+// export const getServerSideProps: GetServerSideProps = async (context) => {
 //   initializeFirebase();
 //   const projects = await getProjects();
 //   const about = await getAbout();
 //   return {
-    
+//     props: {
 //       projects,
 //       about
-    
+//     }
 //   }
 // }
+
+Home.getInitialProps = async () => {
+  initializeFirebase();
+  const projects = await getProjects();
+  const about = await getAbout();
+  return {
+    
+      projects,
+      about
+    
+  }
+}
 
 export default Home
